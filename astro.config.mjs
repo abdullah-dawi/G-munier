@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   // غيّره لرابط pages.dev أو الدومين الحقيقي بعد أول deploy
-  site: 'https://sheikh-site.pages.dev',
+  site: 'https://jihad-munir.pages.dev',
   integrations: [sitemap()],
   vite: { plugins: [tailwindcss()] },
 });
