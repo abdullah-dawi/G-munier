@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  --font-serif: 'Amiri', serif;
+  --color-ink: #1f2a24;
+  --color-paper: #fbf8f1;
+  --color-accent: #1e5b45;
+  --color-muted: #6b6f68;
+  --color-line: #e5dfd2;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  line-height: 1.8;
+}
+
+.placeholder-badge {
+  @apply inline-block rounded-full border border-dashed border-muted px-3 text-xs text-muted;
+}

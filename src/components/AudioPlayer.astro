@@ -1,0 +1,41 @@
+---
+// مشغل صوتي يتذكر مكان التوقف ويدعم تغيير السرعة
+interface Props {
+  src: string;
+  storageKey: string;
+}
+const { src, storageKey } = Astro.props;
+---
+<audio-resume data-key={storageKey} class="block rounded-xl border border-line bg-white/60 p-4">
+  <audio controls preload="metadata" src={src} class="w-full"></audio>
+  <div class="mt-3 flex items-center gap-2 text-sm">
+    <span class="text-muted">السرعة:</span>
+    {[1, 1.25, 1.5, 2].map((r) => (
+      <button type="button" data-rate={r} class="rounded border border-line px-2 hover:border-accent">
+        {r}x
+      </button>
+    ))}
+    <a href={src} download class="ms-auto text-accent">تحميل</a>
+  </div>
+</audio-resume>
+
+<script>
+  class AudioResume extends HTMLElement {
+    connectedCallback() {
+      const audio = this.querySelector('audio');
+      if (!audio) return;
+      const key = `audio-pos:${this.dataset.key}`;
+      try {
+        const saved = Number(localStorage.getItem(key));
+        if (saved > 0) audio.addEventListener('loadedmetadata', () => (audio.currentTime = saved), { once: true });
+      } catch {}
+      audio.addEventListener('timeupdate', () => {
+        try { localStorage.setItem(key, String(Math.floor(audio.currentTime))); } catch {}
+      });
+      this.querySelectorAll<HTMLButtonElement>('[data-rate]').forEach((btn) =>
+        btn.addEventListener('click', () => (audio.playbackRate = Number(btn.dataset.rate)))
+      );
+    }
+  }
+  customElements.define('audio-resume', AudioResume);
+</script>

@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SeriesCard from '../../components/SeriesCard.astro';
+import { CATEGORIES } from '../../site.config';
+
+const series = await getCollection('series');
+const lessons = await getCollection('lessons');
+const countFor = (id: string) => lessons.filter((l) => l.data.series.id === id).length;
+const groups = CATEGORIES.map((c) => ({ c, items: series.filter((s) => s.data.category === c) })).filter((g) => g.items.length);
+---
+<Base title="السلاسل العلمية">
+  <h1 class="font-serif text-3xl text-accent">السلاسل العلمية</h1>
+  {groups.map(({ c, items }) => (
+    <section class="mt-8">
+      <h2 class="text-lg font-semibold">{c}</h2>
+      <div class="mt-3 grid gap-4 sm:grid-cols-2">
+        {items.map((s) => <SeriesCard series={s} count={countFor(s.id)} />)}
+      </div>
+    </section>
+  ))}
+</Base>

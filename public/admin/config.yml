@@ -1,0 +1,45 @@
+# Decap CMS — لوحة إضافة الدروس لغير التقنيين
+# TODO: غيّر repo لاسم الريبو الحقيقي، واضبط الـ OAuth قبل الاستخدام (انظر README)
+backend:
+  name: github
+  repo: ORG/sheikh-site
+  branch: main
+
+# كل إضافة تفتح PR بدل commit مباشر على main
+publish_mode: editorial_workflow
+locale: ar
+
+media_folder: public/uploads
+public_folder: /uploads
+
+collections:
+  - name: series
+    label: السلاسل
+    label_singular: سلسلة
+    folder: src/content/series
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { name: title, label: العنوان, widget: string }
+      - { name: description, label: الوصف, widget: text }
+      - name: category
+        label: التصنيف
+        widget: select
+        options: [عقيدة, فقه, تفسير, حديث, سيرة, رقائق]
+      - { name: book, label: الكتاب المشروح, widget: string, required: false }
+      - { name: status, label: الحالة, widget: select, options: [مستمرة, مكتملة], default: مستمرة }
+
+  - name: lessons
+    label: الدروس
+    label_singular: درس
+    folder: src/content/lessons
+    create: true
+    slug: "{{fields.series}}-lesson-{{fields.order}}"
+    fields:
+      - { name: title, label: العنوان, widget: string }
+      - { name: series, label: السلسلة, widget: relation, collection: series, value_field: "{{slug}}", search_fields: [title], display_fields: [title] }
+      - { name: order, label: رقم الدرس, widget: number, value_type: int, min: 1 }
+      - { name: date, label: التاريخ, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
+      - { name: youtube_id, label: "معرّف يوتيوب (الجزء بعد v=)", widget: string, required: false }
+      - { name: audio_url, label: رابط الصوت (Archive.org), widget: string, required: false }
+      - { name: body, label: الملخص أو التفريغ, widget: markdown, required: false }

@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../site.config';
+---
+<Base title="عن الشيخ">
+  <h1 class="font-serif text-3xl text-accent">{SITE.sheikhName}</h1>
+  <span class="placeholder-badge mt-2">في انتظار النبذة المعتمدة من الشيخ</span>
+
+  <section class="mt-8 space-y-6">
+    <div>
+      <h2 class="text-lg font-semibold">النشأة والطلب</h2>
+      <p class="text-muted">[نبذة مختصرة عن نشأة الشيخ وبداية طلبه للعلم]</p>
+    </div>
+    <div>
+      <h2 class="text-lg font-semibold">الشيوخ والإجازات</h2>
+      <p class="text-muted">[أبرز الشيوخ الذين تلقى عنهم، والإجازات]</p>
+    </div>
+    <div>
+      <h2 class="text-lg font-semibold">المنهج</h2>
+      <p class="text-muted">[وصف مختصر لمنهج الشيخ في التدريس]</p>
+    </div>
+  </section>
+</Base>

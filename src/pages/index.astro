@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import SeriesCard from '../components/SeriesCard.astro';
+import { SITE } from '../site.config';
+
+const series = await getCollection('series');
+const lessons = await getCollection('lessons');
+const countFor = (id: string) => lessons.filter((l) => l.data.series.id === id).length;
+const latest = lessons.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf()).slice(0, 5);
+---
+<Base>
+  <section class="py-6 text-center">
+    <h1 class="font-serif text-4xl text-accent">{SITE.sheikhName}</h1>
+    <p class="mt-3 text-muted">{SITE.tagline}</p>
+  </section>
+
+  <section class="mt-8">
+    <div class="flex items-baseline justify-between">
+      <h2 class="font-serif text-2xl">السلاسل العلمية</h2>
+      <a href="/series/" class="text-sm text-accent">كل السلاسل</a>
+    </div>
+    <div class="mt-4 grid gap-4 sm:grid-cols-2">
+      {series.map((s) => <SeriesCard series={s} count={countFor(s.id)} />)}
+    </div>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="font-serif text-2xl">أحدث الدروس</h2>
+    <ul class="mt-4 divide-y divide-line rounded-xl border border-line bg-white/60">
+      {latest.map((l) => (
+        <li>
+          <a href={`/lessons/${l.id}/`} class="flex justify-between gap-4 px-4 py-3 hover:text-accent">
+            <span>{l.data.title}</span>
+            <time class="shrink-0 text-sm text-muted" datetime={l.data.date.toISOString()}>
+              {l.data.date.toLocaleDateString('ar-EG')}
+            </time>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</Base>

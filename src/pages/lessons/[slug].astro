@@ -1,0 +1,52 @@
+---
+import { getCollection, getEntry, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import YouTube from '../../components/YouTube.astro';
+import AudioPlayer from '../../components/AudioPlayer.astro';
+
+export async function getStaticPaths() {
+  const lessons = await getCollection('lessons');
+  return lessons.map((l) => ({ params: { slug: l.id }, props: { lesson: l } }));
+}
+
+const { lesson } = Astro.props;
+const series = await getEntry(lesson.data.series);
+const siblings = (await getCollection('lessons', (l) => l.data.series.id === lesson.data.series.id)).sort(
+  (a, b) => a.data.order - b.data.order
+);
+const i = siblings.findIndex((l) => l.id === lesson.id);
+const prev = i > 0 ? siblings.at(i - 1) : undefined;
+const next = siblings.at(i + 1);
+const { Content } = await render(lesson);
+const { title, youtube_id, audio_url, date, placeholder } = lesson.data;
+---
+<Base title={title}>
+  <p class="text-sm text-muted">
+    <a href={`/series/${series.id}/`} class="hover:text-accent">{series.data.title}</a>
+    · الدرس {lesson.data.order}
+  </p>
+  <h1 class="mt-2 font-serif text-3xl text-accent">{title}</h1>
+  <p class="mt-1 text-sm text-muted">
+    {date.toLocaleDateString('ar-EG', { dateStyle: 'long' })}
+    {placeholder && <span class="placeholder-badge ms-2">نموذج</span>}
+  </p>
+
+  <div class="mt-6 space-y-4">
+    {youtube_id && <YouTube id={youtube_id} title={title} />}
+    {audio_url && <AudioPlayer src={audio_url} storageKey={lesson.id} />}
+    {!youtube_id && !audio_url && (
+      <div class="grid aspect-video place-items-center rounded-xl border-2 border-dashed border-line text-muted">
+        مكان الفيديو أو الصوت
+      </div>
+    )}
+  </div>
+
+  <article class="prose mt-8 leading-loose">
+    <Content />
+  </article>
+
+  <nav class="mt-10 flex justify-between gap-4 border-t border-line pt-6 text-sm">
+    {prev ? <a href={`/lessons/${prev.id}/`} class="text-accent">→ {prev.data.title}</a> : <span />}
+    {next ? <a href={`/lessons/${next.id}/`} class="text-accent">{next.data.title} ←</a> : <span />}
+  </nav>
+</Base>

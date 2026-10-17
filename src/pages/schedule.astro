@@ -1,0 +1,36 @@
+---
+import Base from '../layouts/Base.astro';
+
+// عدّل الجدول هنا — أو انقله لاحقًا لـ collection لو بقى بيتغير كتير
+const schedule = [
+  { day: 'السبت', time: 'بعد المغرب', subject: '[اسم الدرس]', place: '[المسجد / أونلاين]' },
+  { day: 'الثلاثاء', time: 'بعد العشاء', subject: '[اسم الدرس]', place: '[المسجد / أونلاين]' },
+];
+---
+<Base title="جدول الدروس">
+  <h1 class="font-serif text-3xl text-accent">جدول الدروس</h1>
+  <span class="placeholder-badge mt-2">مواعيد نموذجية</span>
+
+  <div class="mt-6 overflow-x-auto rounded-xl border border-line bg-white/60">
+    <table class="w-full text-start text-sm">
+      <thead class="bg-accent/10 text-accent">
+        <tr>
+          <th class="px-4 py-3 text-start">اليوم</th>
+          <th class="px-4 py-3 text-start">الموعد</th>
+          <th class="px-4 py-3 text-start">الدرس</th>
+          <th class="px-4 py-3 text-start">المكان</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-line">
+        {schedule.map((r) => (
+          <tr>
+            <td class="px-4 py-3">{r.day}</td>
+            <td class="px-4 py-3">{r.time}</td>
+            <td class="px-4 py-3">{r.subject}</td>
+            <td class="px-4 py-3">{r.place}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</Base>
