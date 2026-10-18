@@ -1,0 +1,25 @@
+---
+import { SITE } from '../site.config';
+
+const s = SITE.social;
+const all = [
+  { label: 'تيليجرام', href: s.telegram },
+  { label: 'يوتيوب', href: s.youtube },
+  { label: 'فيسبوك', href: s.facebook },
+  { label: 'واتساب', href: s.whatsapp },
+  { label: 'X', href: s.x },
+  { label: 'البريد', href: s.email && `mailto:${s.email}` },
+];
+const links = all.filter((l) => l.href);
+---
+{links.length > 0 ? (
+  <div class="flex flex-wrap gap-2">
+    {links.map((l) => (
+      <a href={l.href} target="_blank" rel="noopener" class="rounded-full border border-line px-3 py-1 text-sm hover:border-accent hover:text-accent">
+        {l.label}
+      </a>
+    ))}
+  </div>
+) : (
+  <span class="placeholder-badge">روابط التواصل تُضاف من site.config.ts</span>
+)}

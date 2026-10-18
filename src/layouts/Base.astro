@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
-import { SITE } from '../site.config';
+import { SITE, NAV } from '../site.config';
+import Contact from '../components/Contact.astro';
 
 interface Props {
   title?: string;
@@ -8,13 +9,6 @@ interface Props {
 }
 const { title, description = SITE.description } = Astro.props;
 const fullTitle = title ? `${title} | ${SITE.name}` : SITE.name;
-
-const nav = [
-  { href: '/', label: 'الرئيسية' },
-  { href: '/series/', label: 'السلاسل' },
-  { href: '/schedule/', label: 'جدول الدروس' },
-  { href: '/about/', label: 'عن الشيخ' },
-];
 const path = Astro.url.pathname;
 ---
 <!doctype html>
@@ -22,29 +16,32 @@ const path = Astro.url.pathname;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#1e5b45" />
     <title>{fullTitle}</title>
     <meta name="description" content={description} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={new URL(path, Astro.site)} />
     <meta property="og:locale" content="ar_AR" />
+    <meta name="twitter:card" content="summary" />
     <link rel="canonical" href={new URL(path, Astro.site)} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@400;600&display=swap"
     />
   </head>
   <body class="min-h-screen flex flex-col">
     <header class="border-b border-line bg-paper/90 backdrop-blur sticky top-0 z-10">
       <div class="mx-auto max-w-4xl px-4 py-3 flex flex-wrap items-center justify-between gap-3">
         <a href="/" class="font-serif text-2xl text-accent">{SITE.name}</a>
-        <nav class="flex gap-4 text-sm">
-          {nav.map((item) => (
+        <nav class="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          {NAV.map((item) => (
             <a
               href={item.href}
-              class:list={['hover:text-accent', path === item.href && 'text-accent font-semibold']}
+              class:list={['hover:text-accent', path.startsWith(item.href) && 'text-accent font-semibold']}
             >
               {item.label}
             </a>
@@ -58,7 +55,17 @@ const path = Astro.url.pathname;
     </main>
 
     <footer class="border-t border-line text-sm text-muted">
-      <div class="mx-auto max-w-4xl px-4 py-6 flex flex-wrap justify-between gap-2">
+      <div class="mx-auto max-w-4xl px-4 py-8 grid gap-6 sm:grid-cols-2">
+        <div>
+          <p class="font-serif text-lg text-accent">{SITE.name}</p>
+          <p class="mt-1">{SITE.tagline}</p>
+        </div>
+        <div>
+          <p class="mb-2 font-semibold text-ink">تواصل</p>
+          <Contact />
+        </div>
+      </div>
+      <div class="mx-auto max-w-4xl px-4 pb-6 flex flex-wrap justify-between gap-2">
         <span>© {new Date().getFullYear()} {SITE.name}</span>
         <span>نسأل الله أن ينفع به</span>
       </div>

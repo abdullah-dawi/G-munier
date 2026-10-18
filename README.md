@@ -1,4 +1,4 @@
-# موقع الشيخ — MVP
+# موقع الشيخ جهاد منير — MVP
 
 موقع ثابت (Astro + Tailwind) لمكتبة دروس الشيخ. المحتوى الحالي **خانات نموذجية** (`placeholder: true`) لحد ما يوصل المحتوى الحقيقي.
 
@@ -14,28 +14,29 @@ npm run build    # الناتج في dist/
 
 | المطلوب | الملف |
 | --- | --- |
-| اسم الموقع والشيخ والسوشيال | `src/site.config.ts` |
-| سلسلة جديدة | ملف في `src/content/series/<slug>.md` |
-| درس جديد | ملف في `src/content/lessons/<series>-lesson-<n>.md` |
-| النبذة | `src/pages/about.astro` |
+| اسم الموقع وروابط التواصل والقائمة | `src/site.config.ts` |
+| سلسلة خطب أو دورة | `src/content/series/<slug>.md` (`kind: خطب` أو `kind: دورة`) |
+| خطبة أو درس | `src/content/lessons/<series>-<n>.md` |
+| مقال | `src/content/articles/<slug>.md` |
+| فائدة | `src/content/fawaid/<id>.md` (النص في الـ body، و `source` اختياري) |
+| السيرة الذاتية | `src/pages/about.astro` |
 | الجدول | `src/pages/schedule.astro` |
 
-مثال درس:
+مثال خطبة:
 
 ```md
 ---
-title: "شرح كتاب التوحيد - الدرس 3"
-series: kitab-al-tawheed      # لازم يطابق اسم ملف السلسلة
+title: "حقوق الجار"
+series: khutab-akhlaq       # لازم يطابق اسم ملف السلسلة
 order: 3
 date: 2026-10-17
-youtube_id: "xxxxxxxxxxx"     # اختياري
-audio_url: "https://archive.org/download/<item>/lesson-03.mp3"  # اختياري
+youtube_id: "xxxxxxxxxxx"
+audio_url: "https://archive.org/download/<item>/khutba-03.mp3"
 ---
 ملخص أو تفريغ (اختياري)
 ```
 
-لما تحط المحتوى الحقيقي: امسح ملفات `series-1*` و `series-2*` أو شيل منها `placeholder: true`.
-الـ schema في `src/content.config.ts`، والـ build هيفشل لو في حقل ناقص أو سلسلة مش موجودة.
+لما تحط المحتوى الحقيقي: امسح الملفات اللي فيها `placeholder: true`.
 
 ## الـ Deploy على Cloudflare Pages
 
@@ -60,7 +61,7 @@ src/
 ├── content/{series,lessons}/
 ├── components/           # AudioPlayer (يتذكر مكان التوقف), YouTube (lite embed), SeriesCard
 ├── layouts/Base.astro    # RTL + الخطوط + SEO
-└── pages/                # الرئيسية، السلاسل، الدرس، عن الشيخ، الجدول، 404
+└── pages/                # الرئيسية، الخطب، الدورات، المقالات، الفوائد، السيرة، الجدول
 ```
 
 تفاصيل الـ infra في `docs/infra.md`.

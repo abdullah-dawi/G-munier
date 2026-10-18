@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const articles = (await getCollection('articles')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+---
+<Base title="المقالات" description="مقالات فضيلة الشيخ جهاد منير.">
+  <h1 class="font-serif text-3xl text-accent">المقالات</h1>
+  <div class="mt-6 space-y-4">
+    {articles.map((a) => (
+      <a href={`/articles/${a.id}/`} class="block rounded-xl border border-line bg-white/60 p-5 hover:border-accent">
+        <div class="flex justify-between gap-2 text-xs text-muted">
+          <span>{a.data.category}</span>
+          {a.data.placeholder ? <span class="placeholder-badge">نموذج</span> : <time datetime={a.data.date.toISOString()}>{a.data.date.toLocaleDateString('ar-EG')}</time>}
+        </div>
+        <h2 class="mt-2 font-serif text-xl">{a.data.title}</h2>
+        <p class="mt-1 text-sm text-muted">{a.data.summary}</p>
+      </a>
+    ))}
+  </div>
+</Base>

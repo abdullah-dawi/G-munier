@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { getEntry, render } from 'astro:content';
+import Share from './Share.astro';
+
+interface Props {
+  faida: CollectionEntry<'fawaid'>;
+}
+const { faida } = Astro.props;
+const { Content } = await render(faida);
+const source = faida.data.source ? await getEntry(faida.data.source) : undefined;
+const text = (faida.body ?? '').trim();
+---
+<figure id={faida.id} class="rounded-xl border border-line bg-white/60 p-5">
+  <blockquote class="font-serif text-xl leading-loose text-ink">
+    <Content />
+  </blockquote>
+  <figcaption class="mt-3 flex flex-wrap items-center justify-between gap-2 text-sm text-muted">
+    <span>
+      {faida.data.category}
+      {source && <> · من <a href={`/lessons/${source.id}/`} class="text-accent">{source.data.title}</a></>}
+      {faida.data.placeholder && <span class="placeholder-badge ms-2">نموذج</span>}
+    </span>
+  </figcaption>
+  <div class="mt-3">
+    <Share text={`${text}\n— الشيخ جهاد منير`} path={`/fawaid/#${faida.id}`} />
+  </div>
+</figure>

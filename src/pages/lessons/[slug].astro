@@ -3,6 +3,7 @@ import { getCollection, getEntry, render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import YouTube from '../../components/YouTube.astro';
 import AudioPlayer from '../../components/AudioPlayer.astro';
+import Share from '../../components/Share.astro';
 
 export async function getStaticPaths() {
   const lessons = await getCollection('lessons');
@@ -19,11 +20,12 @@ const prev = i > 0 ? siblings.at(i - 1) : undefined;
 const next = siblings.at(i + 1);
 const { Content } = await render(lesson);
 const { title, youtube_id, audio_url, date, placeholder } = lesson.data;
+const unit = series.data.kind === 'خطب' ? 'الخطبة' : 'الدرس';
 ---
 <Base title={title}>
   <p class="text-sm text-muted">
     <a href={`/series/${series.id}/`} class="hover:text-accent">{series.data.title}</a>
-    · الدرس {lesson.data.order}
+    · {unit} {lesson.data.order}
   </p>
   <h1 class="mt-2 font-serif text-3xl text-accent">{title}</h1>
   <p class="mt-1 text-sm text-muted">
@@ -41,7 +43,9 @@ const { title, youtube_id, audio_url, date, placeholder } = lesson.data;
     )}
   </div>
 
-  <article class="prose mt-8 leading-loose">
+  <div class="mt-4"><Share text={`${title} — ${series.data.title}`} /></div>
+
+  <article class="mt-8 leading-loose">
     <Content />
   </article>
 
