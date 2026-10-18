@@ -2,7 +2,7 @@
 # TODO: غيّر repo لاسم الريبو الحقيقي، واضبط الـ OAuth قبل الاستخدام (انظر README)
 backend:
   name: github
-  repo: jihad-munir/jihad-munir-site
+  repo: abdullah-dawi/G-munier
   branch: main
 
 # كل إضافة تفتح PR بدل commit مباشر على main
