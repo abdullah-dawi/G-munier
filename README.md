@@ -65,3 +65,22 @@ src/
 ```
 
 تفاصيل الـ infra في `docs/infra.md`.
+
+## الأتمتة: Deploy + تيليجرام
+
+كل `git push` على `main` يشغّل `.github/workflows/deploy.yml`:
+1. `npm run build`
+2. deploy على Cloudflare Pages (`jihad-munir`)
+3. أي خطبة/درس أو فائدة **جديدة** (من غير `placeholder: true`) تتنشر تلقائي على قناة تيليجرام عن طريق `scripts/notify-telegram.mjs`
+
+**Secrets المطلوبة** (GitHub → Settings → Secrets and variables → Actions):
+
+| Secret | منين |
+| --- | --- |
+| `CLOUDFLARE_API_TOKEN` | Cloudflare → My Profile → API Tokens → Create → قالب "Edit Cloudflare Workers" |
+| `CLOUDFLARE_ACCOUNT_ID` | Cloudflare → Workers & Pages → Account ID على اليمين |
+| `TELEGRAM_BOT_TOKEN` | من @BotFather → `/newbot` |
+| `TELEGRAM_CHAT_ID` | معرّف القناة، مثل `@jihadmunir` (بعد إضافة البوت كـ Admin بصلاحية Post) |
+
+لو secrets تيليجرام مش موجودة، الـ deploy يشتغل عادي وخطوة النشر تتخطى.
+تجربة محلية من غير إرسال: `node scripts/notify-telegram.mjs HEAD~1`

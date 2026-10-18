@@ -1,0 +1,39 @@
+name: Deploy & announce
+
+# كل push على main: build ← deploy على Cloudflare Pages ← نشر الجديد على تيليجرام
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      SITE_URL: https://jihad-munir.pages.dev
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        run: npx wrangler@4 pages deploy dist --project-name jihad-munir --branch main
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Announce new content on Telegram
+        if: env.TELEGRAM_BOT_TOKEN != '' && github.event_name == 'push'
+        run: node scripts/notify-telegram.mjs ${{ github.event.before }}

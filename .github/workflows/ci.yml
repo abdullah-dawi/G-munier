@@ -1,9 +1,8 @@
 name: CI
 
+# فحص الـ build على كل PR (الـ deploy في deploy.yml)
 on:
   pull_request:
-  push:
-    branches: [main]
 
 jobs:
   build:
