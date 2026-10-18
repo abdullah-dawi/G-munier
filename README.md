@@ -36,7 +36,7 @@ audio_url: "https://archive.org/download/<item>/khutba-03.mp3"
 ملخص أو تفريغ (اختياري)
 ```
 
-لما تحط المحتوى الحقيقي: امسح الملفات اللي فيها `placeholder: true`.
+**التفريغ:** يُكتب في body ملف الخطبة تحت الـ frontmatter، استخدم `
 
 ## الـ Deploy على Cloudflare Pages
 

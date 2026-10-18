@@ -20,3 +20,18 @@ html {
 .placeholder-badge {
   @apply inline-block rounded-full border border-dashed border-muted px-3 text-xs text-muted;
 }
+
+/* التفريغ */
+.transcript { font-size: 1.125rem; line-height: 2.1; }
+.transcript > * + * { margin-top: 1rem; }
+.transcript h2 { font-family: var(--font-serif); font-size: 1.5rem; color: var(--color-accent); margin-top: 2rem; }
+.transcript h3 { font-weight: 600; font-size: 1.15rem; margin-top: 1.5rem; }
+.transcript blockquote { border-inline-start: 4px solid var(--color-accent); padding-inline-start: 1rem; font-family: var(--font-serif); font-size: 1.3rem; }
+.transcript ul, .transcript ol { padding-inline-start: 1.5rem; list-style: disc; }
+.transcript ol { list-style: decimal; }
+
+@media print {
+  header, footer, nav, .no-print { display: none !important; }
+  html { background: #fff; }
+  main { max-width: none; padding: 0; }
+}

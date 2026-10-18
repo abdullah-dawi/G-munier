@@ -40,7 +40,8 @@ collections:
       - &date { name: date, label: التاريخ, widget: datetime, format: "YYYY-MM-DD", date_format: "YYYY-MM-DD", time_format: false }
       - { name: youtube_id, label: "معرّف يوتيوب (الجزء بعد v=)", widget: string, required: false }
       - { name: audio_url, label: رابط الصوت (Archive.org), widget: string, required: false }
-      - { name: body, label: الملخص أو التفريغ, widget: markdown, required: false }
+      - { name: summary, label: ملخص في سطرين, widget: text, required: false }
+      - { name: body, label: "التفريغ (استخدم ## للعناوين: الخطبة الأولى / الخطبة الثانية)", widget: markdown, required: false }
 
   - name: articles
     label: المقالات

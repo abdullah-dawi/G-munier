@@ -42,7 +42,10 @@ const unit = isKhutab ? 'خطبة' : 'درس';
           <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-accent/10 text-sm text-accent">
             {l.data.order}
           </span>
-          <span class="flex-1">{l.data.title}</span>
+          <span class="flex-1">
+            {l.data.title}
+            {(l.body ?? '').trim() && <span class="ms-2 rounded-full bg-accent/10 px-2 text-xs text-accent">مفرّغة</span>}
+          </span>
           <time class="shrink-0 text-xs text-muted" datetime={l.data.date.toISOString()}>
             {l.data.date.toLocaleDateString('ar-EG')}
           </time>

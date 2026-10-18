@@ -8,4 +8,3 @@ placeholder: true
 # audio_url: "https://archive.org/download/<item>/khutab-1-2.mp3"
 ---
 
-[مكان ملخص أو تفريغ — اختياري]

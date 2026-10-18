@@ -8,4 +8,3 @@ placeholder: true
 # audio_url: "https://archive.org/download/<item>/course-1-1.mp3"
 ---
 
-[مكان ملخص أو تفريغ — اختياري]

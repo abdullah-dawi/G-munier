@@ -17,7 +17,7 @@ const series = defineCollection({
   }),
 });
 
-// درس أو خطبة داخل سلسلة
+// درس أو خطبة داخل سلسلة — التفريغ الكامل يُكتب في body الملف
 const lessons = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/lessons' }),
   schema: z.object({
@@ -27,6 +27,7 @@ const lessons = defineCollection({
     date: z.coerce.date(),
     youtube_id: z.string().optional(),
     audio_url: z.url().optional(),
+    summary: z.string().optional(), // ملخص في سطرين — يظهر فوق التفريغ
     placeholder: z.boolean().default(false),
   }),
 });
