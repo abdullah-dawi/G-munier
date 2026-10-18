@@ -41,7 +41,10 @@ const path = Astro.url.pathname;
           {NAV.map((item) => (
             <a
               href={item.href}
-              class:list={['hover:text-accent', path.startsWith(item.href) && 'text-accent font-semibold']}
+              class:list={[
+                'hover:text-accent',
+                (item.href === '/' ? path === '/' : path.startsWith(item.href)) && 'text-accent font-semibold',
+              ]}
             >
               {item.label}
             </a>

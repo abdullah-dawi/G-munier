@@ -1,84 +1,102 @@
 ---
+// الصفحة الرئيسية = السيرة الذاتية، ثم قائمة الدورات والخطب
 import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
-import SeriesCard from '../components/SeriesCard.astro';
-import FaidaCard from '../components/FaidaCard.astro';
 import { SITE } from '../site.config';
+import { RESUME } from '../resume';
 
 const series = await getCollection('series');
 const lessons = await getCollection('lessons');
 const countFor = (id: string) => lessons.filter((l) => l.data.series.id === id).length;
-const khutab = series.filter((s) => s.data.kind === 'خطب').slice(0, 4);
-const courses = series.filter((s) => s.data.kind === 'دورة').slice(0, 4);
-const byDate = <T extends { data: { date: Date } }>(a: T, b: T) => b.data.date.valueOf() - a.data.date.valueOf();
-const latest = [...lessons].sort(byDate).slice(0, 5);
-const faida = (await getCollection('fawaid')).sort(byDate).at(0);
-const articles = (await getCollection('articles')).sort(byDate).slice(0, 3);
+const courses = series.filter((s) => s.data.kind === 'دورة');
+const khutab = series.filter((s) => s.data.kind === 'خطب');
+const fawaidCount = (await getCollection('fawaid')).length;
+const isPlaceholder = RESUME.summary.startsWith('[');
+
+const lists = [
+  { title: 'الدورات', href: '/courses/', items: courses, unit: 'درس' },
+  { title: 'الخطب', href: '/khutab/', items: khutab, unit: 'خطبة' },
+];
 ---
 <Base>
-  <section class="py-6 text-center">
-    <h1 class="font-serif text-4xl text-accent">{SITE.sheikhName}</h1>
-    <p class="mt-3 text-muted">{SITE.tagline}</p>
-  </section>
-
-  {faida && (
-    <section class="mt-4">
-      <h2 class="mb-3 text-sm font-semibold text-muted">فائدة</h2>
-      <FaidaCard faida={faida} />
-    </section>
-  )}
-
-  <section class="mt-10">
-    <div class="flex items-baseline justify-between">
-      <h2 class="font-serif text-2xl">سلاسل الخطب</h2>
-      <a href="/khutab/" class="text-sm text-accent">كل الخطب</a>
-    </div>
-    <div class="mt-4 grid gap-4 sm:grid-cols-2">
-      {khutab.map((s) => <SeriesCard series={s} count={countFor(s.id)} />)}
-    </div>
-  </section>
-
-  <section class="mt-10">
-    <div class="flex items-baseline justify-between">
-      <h2 class="font-serif text-2xl">الدورات العلمية</h2>
-      <a href="/courses/" class="text-sm text-accent">كل الدورات</a>
-    </div>
-    <div class="mt-4 grid gap-4 sm:grid-cols-2">
-      {courses.map((s) => <SeriesCard series={s} count={countFor(s.id)} />)}
-    </div>
-  </section>
-
-  <section class="mt-10 grid gap-8 sm:grid-cols-2">
-    <div>
-      <h2 class="font-serif text-2xl">الأحدث</h2>
-      <ul class="mt-4 divide-y divide-line rounded-xl border border-line bg-white/60">
-        {latest.map((l) => (
-          <li>
-            <a href={`/lessons/${l.id}/`} class="flex justify-between gap-4 px-4 py-3 hover:text-accent">
-              <span>{l.data.title}</span>
-              <time class="shrink-0 text-sm text-muted" datetime={l.data.date.toISOString()}>
-                {l.data.date.toLocaleDateString('ar-EG')}
-              </time>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
-    <div>
-      <div class="flex items-baseline justify-between">
-        <h2 class="font-serif text-2xl">مقالات</h2>
-        <a href="/articles/" class="text-sm text-accent">الكل</a>
+  <!-- التعريف -->
+  <section class="flex flex-col items-center gap-6 py-4 text-center sm:flex-row sm:items-center sm:text-start">
+    {RESUME.photo ? (
+      <img src={RESUME.photo} alt={SITE.sheikhName} class="h-36 w-36 shrink-0 rounded-full border-4 border-white object-cover shadow" />
+    ) : (
+      <div class="grid h-36 w-36 shrink-0 place-items-center rounded-full border-2 border-dashed border-line bg-white/60 text-sm text-muted">
+        صورة الشيخ
       </div>
-      <ul class="mt-4 space-y-3">
-        {articles.map((a) => (
-          <li>
-            <a href={`/articles/${a.id}/`} class="block rounded-xl border border-line bg-white/60 px-4 py-3 hover:border-accent">
-              <span class="block">{a.data.title}</span>
-              <span class="text-sm text-muted">{a.data.summary}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
+    )}
+    <div>
+      <h1 class="font-serif text-4xl text-accent">{SITE.sheikhName}</h1>
+      <p class="mt-2 text-lg">{SITE.tagline}</p>
+      <p class="mt-3 max-w-2xl text-muted">{RESUME.summary}</p>
+      {isPlaceholder && <span class="placeholder-badge mt-3">في انتظار السيرة المعتمدة من الشيخ</span>}
     </div>
   </section>
+
+  <!-- الاهتمام بالتربية -->
+  <section class="mt-10 rounded-2xl border border-accent/30 bg-accent/5 p-6">
+    <h2 class="font-serif text-2xl text-accent">{RESUME.focus.title}</h2>
+    <p class="mt-2 text-muted">{RESUME.focus.body}</p>
+    <ul class="mt-4 flex flex-wrap gap-2">
+      {RESUME.focus.items.map((i) => (
+        <li class="rounded-full border border-accent/30 bg-white px-3 py-1 text-sm">{i}</li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- باقي السيرة -->
+  <div class="mt-10 grid gap-8 sm:grid-cols-3">
+    {RESUME.sections.filter((s) => s.items.length).map((s) => (
+      <section>
+        <h2 class="border-b border-line pb-2 font-serif text-xl text-accent">{s.title}</h2>
+        <ul class="mt-3 list-disc space-y-1 ps-5 text-muted">
+          {s.items.map((i) => <li>{i}</li>)}
+        </ul>
+      </section>
+    ))}
+  </div>
+
+  <!-- الدورات والخطب -->
+  <section class="mt-14">
+    <h2 class="font-serif text-3xl">الدورات والخطب</h2>
+    <div class="mt-5 grid gap-6 sm:grid-cols-2">
+      {lists.map((list) => (
+        <div class="rounded-xl border border-line bg-white/60">
+          <div class="flex items-baseline justify-between border-b border-line px-5 py-3">
+            <h3 class="text-lg font-semibold">{list.title}</h3>
+            <a href={list.href} class="text-sm text-accent">عرض الكل</a>
+          </div>
+          {list.items.length === 0 ? (
+            <p class="px-5 py-4 text-sm text-muted">لا يوجد بعد.</p>
+          ) : (
+            <ul class="divide-y divide-line">
+              {list.items.map((s) => (
+                <li>
+                  <a href={`/series/${s.id}/`} class="flex items-center justify-between gap-3 px-5 py-3 hover:text-accent">
+                    <span>
+                      {s.data.title}
+                      {s.data.placeholder && <span class="placeholder-badge ms-2">نموذج</span>}
+                    </span>
+                    <span class="shrink-0 text-sm text-muted">{countFor(s.id)} {list.unit}</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- رابط الفوائد -->
+  <a href="/fawaid/" class="mt-8 flex items-center justify-between rounded-xl border border-line bg-white/60 px-5 py-4 hover:border-accent">
+    <span>
+      <span class="font-serif text-xl text-accent">الفوائد</span>
+      <span class="ms-2 text-sm text-muted">فوائد من كتابات الشيخ ودروسه، جاهزة للنسخ</span>
+    </span>
+    <span class="text-sm text-muted">{fawaidCount} فائدة ←</span>
+  </a>
 </Base>

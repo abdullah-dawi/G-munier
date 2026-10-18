@@ -17,9 +17,9 @@ npm run build    # الناتج في dist/
 | اسم الموقع وروابط التواصل والقائمة | `src/site.config.ts` |
 | سلسلة خطب أو دورة | `src/content/series/<slug>.md` (`kind: خطب` أو `kind: دورة`) |
 | خطبة أو درس | `src/content/lessons/<series>-<n>.md` |
-| مقال | `src/content/articles/<slug>.md` |
-| فائدة | `src/content/fawaid/<id>.md` (النص في الـ body، و `source` اختياري) |
-| السيرة الذاتية | `src/pages/about.astro` |
+| مقال (مخفي من القائمة حاليًا) | `src/content/articles/<slug>.md` |
+| فائدة | `src/content/fawaid/<id>.md` — النص في الـ body، و `source` اختياري (فاضي = من كتابة الشيخ) |
+| السيرة الذاتية (الصفحة الرئيسية) | `src/resume.ts` + صورة الشيخ في `public/images/` |
 | الجدول | `src/pages/schedule.astro` |
 
 مثال خطبة:

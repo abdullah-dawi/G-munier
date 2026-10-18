@@ -2,13 +2,43 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import FaidaCard from '../../components/FaidaCard.astro';
+import { CATEGORIES } from '../../site.config';
 
 const fawaid = (await getCollection('fawaid')).sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const used = CATEGORIES.filter((c) => fawaid.some((f) => f.data.category === c));
 ---
-<Base title="الفوائد" description="فوائد قصيرة من دروس وخطب فضيلة الشيخ جهاد منير.">
+<Base title="الفوائد" description="فوائد قصيرة من كتابات ودروس وخطب فضيلة الشيخ جهاد منير، جاهزة للنسخ والمشاركة.">
   <h1 class="font-serif text-3xl text-accent">الفوائد</h1>
-  <p class="mt-2 text-muted">كلمات قصيرة من الدروس والخطب، شاركها بضغطة.</p>
+  <p class="mt-2 text-muted">فوائد كتبها الشيخ أو نُقلت من دروسه وخطبه. انسخ أي فائدة وشاركها كما هي.</p>
+
+  {used.length > 1 && (
+    <div class="mt-6 flex flex-wrap gap-2 text-sm" id="filters">
+      <button type="button" data-filter="" class="filter rounded-full border border-accent bg-accent px-3 py-1 text-white">الكل</button>
+      {used.map((c) => (
+        <button type="button" data-filter={c} class="filter rounded-full border border-line px-3 py-1 hover:border-accent">{c}</button>
+      ))}
+    </div>
+  )}
+
   <div class="mt-6 space-y-4">
     {fawaid.map((f) => <FaidaCard faida={f} />)}
   </div>
 </Base>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>('.filter');
+  const cards = document.querySelectorAll<HTMLElement>('.faida');
+  buttons.forEach((btn) =>
+    btn.addEventListener('click', () => {
+      const f = btn.dataset.filter;
+      buttons.forEach((b) => {
+        const on = b === btn;
+        b.classList.toggle('bg-accent', on);
+        b.classList.toggle('text-white', on);
+        b.classList.toggle('border-accent', on);
+        b.classList.toggle('border-line', !on);
+      });
+      cards.forEach((c) => (c.hidden = !!f && c.dataset.category !== f));
+    })
+  );
+</script>

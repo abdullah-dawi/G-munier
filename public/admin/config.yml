@@ -23,7 +23,7 @@ collections:
       - { name: title, label: العنوان, widget: string }
       - { name: kind, label: النوع, widget: select, options: [خطب, دورة] }
       - { name: description, label: الوصف, widget: text }
-      - &category { name: category, label: التصنيف, widget: select, options: [عقيدة, فقه, تفسير, حديث, سيرة, رقائق, أسرة ومجتمع] }
+      - &category { name: category, label: التصنيف, widget: select, options: [تربية, أسرة ومجتمع, عقيدة, فقه, تفسير, حديث, سيرة, رقائق] }
       - { name: book, label: الكتاب المشروح (للدورات), widget: string, required: false }
       - { name: status, label: الحالة, widget: select, options: [مستمرة, مكتملة], default: مستمرة }
 
@@ -64,5 +64,5 @@ collections:
     fields:
       - { name: body, label: نص الفائدة, widget: text }
       - *category
-      - { name: source, label: من خطبة / درس, widget: relation, collection: lessons, value_field: "{{slug}}", search_fields: [title], display_fields: [title], required: false }
+      - { name: source, label: "من خطبة / درس (اتركه فارغًا لو من كتابة الشيخ)", widget: relation, collection: lessons, value_field: "{{slug}}", search_fields: [title], display_fields: [title], required: false }
       - *date

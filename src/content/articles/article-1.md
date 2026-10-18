@@ -1,7 +1,7 @@
 ---
 title: "مقال نموذجي"
 summary: "خانة لمقال — سطر واحد يلخص فكرته."
-category: رقائق
+category: تربية
 date: 2026-10-10
 placeholder: true
 ---

@@ -1,6 +1,6 @@
 ---
 date: 2026-10-01
-category: رقائق
+category: تربية
 source: khutab-1-1
 placeholder: true
 ---
